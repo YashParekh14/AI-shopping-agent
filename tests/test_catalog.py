@@ -1,4 +1,3 @@
-"""Tests for the catalog domain logic (search, lookup, ordering)."""
 
 import catalog
 

@@ -1,11 +1,3 @@
-"""
-Evaluation scenarios for the shopping agent.
-
-Each scenario is a list of user turns plus a set of property checks run against
-the agent's tool-call trace and final reply. These target the behaviours that
-actually matter for an ordering agent: not over-ordering, respecting filters,
-and only checking out after explicit confirmation.
-"""
 
 from dataclasses import dataclass, field
 from typing import Callable
@@ -19,7 +11,7 @@ class Scenario:
     checks: list[Callable] = field(default_factory=list)
 
 
-# --- reusable check builders ------------------------------------------------
+# --- reusable check builders -----
 
 def tool_was_called(name: str):
     def check(tool_calls, final_text):
@@ -61,7 +53,7 @@ def all_mentioned_products_under_price(max_price: float):
     return check
 
 
-# --- scenarios --------------------------------------------------------------
+# --- scenarios -----
 
 SCENARIOS = [
     Scenario(

@@ -1,7 +1,3 @@
-"""
-Shared fixtures. Builds a small, fully-controlled SQLite database in a temp
-file so tests are deterministic and never touch the real store.db.
-"""
 
 import sqlite3
 
@@ -17,21 +13,7 @@ def test_db(tmp_path, monkeypatch):
     conn = sqlite3.connect(db_path)
     cur = conn.cursor()
     cur.executescript(
-        """
-        CREATE TABLE products (
-            id INTEGER PRIMARY KEY, name TEXT, category TEXT,
-            price REAL, description TEXT, is_organic INTEGER DEFAULT 0
-        );
-        CREATE TABLE reviews (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            product_id INTEGER, rating REAL, reviewer_name TEXT, review_text TEXT
-        );
-        CREATE TABLE orders (
-            id INTEGER PRIMARY KEY AUTOINCREMENT,
-            product_id INTEGER, product_name TEXT, price REAL,
-            ordered_at TEXT NOT NULL DEFAULT (datetime('now'))
-        );
-        """
+        
     )
     products = [
         (1, "Organic Raw Honey", "honey", 14.99, "Pure organic raw honey", 1),

@@ -1,9 +1,8 @@
 """
 Catalog domain logic: product search, lookup, and order creation.
 
-These are plain functions with no LLM / LangChain dependency, which keeps the
-business logic unit-testable in isolation. The agent's @tool functions in
-shopping_agent.py are thin wrappers around these.
+search_products now joins ratings directly so the agent gets everything
+it needs in a single tool call — no separate get_ratings step required.
 """
 
 from typing import Optional
@@ -15,29 +14,43 @@ def search_products(
     query: str = "",
     max_price: Optional[float] = None,
     is_organic: Optional[bool] = None,
+    min_rating: Optional[float] = None,
 ) -> list[dict]:
-    """Search products by keyword (name/description/category), with optional
-    max_price and organic filters. Returns a list of product dicts."""
-    sql = (
-        "SELECT id, name, category, price, description, is_organic "
-        "FROM products WHERE 1=1"
-    )
+    """Search products, joining average ratings from the reviews table.
+
+    Returns products with their average_rating and review_count included,
+    so the agent never needs a separate ratings call.
+    """
+    sql = """
+        SELECT p.id, p.name, p.category, p.price, p.description, p.is_organic,
+               ROUND(COALESCE(AVG(r.rating), 0), 2) AS average_rating,
+               COUNT(r.id) AS review_count
+        FROM products p
+        LEFT JOIN reviews r ON r.product_id = p.id
+        WHERE 1=1
+    """
     params: list = []
 
     if query:
-        sql += " AND (name LIKE ? OR description LIKE ? OR category LIKE ?)"
+        sql += " AND (p.name LIKE ? OR p.description LIKE ? OR p.category LIKE ?)"
         like = f"%{query}%"
         params.extend([like, like, like])
 
     if max_price is not None:
-        sql += " AND price <= ?"
+        sql += " AND p.price <= ?"
         params.append(max_price)
 
     if is_organic is not None:
-        sql += " AND is_organic = ?"
+        sql += " AND p.is_organic = ?"
         params.append(1 if is_organic else 0)
 
-    sql += " ORDER BY price ASC"
+    sql += " GROUP BY p.id"
+
+    if min_rating is not None:
+        sql += " HAVING average_rating >= ?"
+        params.append(min_rating)
+
+    sql += " ORDER BY average_rating DESC, p.price ASC"
 
     with get_connection() as conn:
         rows = conn.execute(sql, params).fetchall()
@@ -50,13 +63,15 @@ def search_products(
             "price": row["price"],
             "description": row["description"],
             "is_organic": bool(row["is_organic"]),
+            "average_rating": row["average_rating"],
+            "review_count": row["review_count"],
         }
         for row in rows
     ]
 
 
 def get_product(product_id: int) -> Optional[dict]:
-    """Return a single product dict by ID, or None if it doesn't exist."""
+    """Return a single product dict by ID, or None if not found."""
     with get_connection() as conn:
         row = conn.execute(
             "SELECT id, name, category, price, description, is_organic "
@@ -80,10 +95,7 @@ def create_order(product_id: int) -> dict:
     """Create an order for a product. Returns a result dict.
 
     On success: {"ok": True, "order_id", "product_name", "price"}
-    On unknown product: {"ok": False, "error": "..."}.
-
-    Validation happens here in code rather than relying solely on the agent's
-    prompt, so an invalid product_id can never reach the orders table.
+    On unknown product: {"ok": False, "error": "..."}
     """
     with get_connection() as conn:
         row = conn.execute(

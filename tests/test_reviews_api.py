@@ -1,4 +1,3 @@
-"""Tests for the reviews API (single and batch ratings)."""
 
 import reviews_api
 

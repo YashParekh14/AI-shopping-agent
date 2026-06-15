@@ -1,13 +1,4 @@
-"""
-Run the behavioural eval against the live agent.
 
-Requires GROQ_API_KEY to be set (it calls the real model). From the project
-root:  python -m eval.run_eval
-
-For each scenario it replays the user turns, accumulates the message history
-the same way app.py does, collects every tool call the agent made, and runs the
-scenario's property checks against that trace.
-"""
 
 import os
 import sys
@@ -30,7 +21,7 @@ def run():
         print("GROQ_API_KEY not set — cannot run the live eval.")
         sys.exit(1)
 
-    from shopping_agent import agent  # imported here so tests/imports stay light
+    from shopping_agent import agent  
 
     total_checks = 0
     passed_checks = 0

@@ -2,7 +2,8 @@
 streamlit>=1.33
 langchain>=1.0
 langchain-core>=0.3
-langchain-groq>=0.2
+langchain-openai>=0.2
+openai>=1.0
 python-dotenv>=1.0
 
 # Dev / testing

@@ -11,17 +11,15 @@ from setup_db import create_database
 if not os.path.exists(config.DB_PATH):
     create_database()
     
-# ---------------------------------------------------------------------------
-# Page config
-# ---------------------------------------------------------------------------
+
 st.set_page_config(page_title="AI Shopping Assistant", page_icon="🛒", layout="wide")
 
 st.title("🛒 AI Shopping Assistant")
 st.caption("Tell me what you want — I'll search, rate, and order the best match for you.")
 
-# ---------------------------------------------------------------------------
-# Chat state  (initialised FIRST, before any widget tries to use it)
-# ---------------------------------------------------------------------------
+
+# Chat state  
+
 if "messages" not in st.session_state:
     st.session_state.messages = []
 
@@ -33,9 +31,9 @@ def run_agent(spinner_text: str) -> str:
     return result["messages"][-1].content.replace("`", "")
 
 
-# ---------------------------------------------------------------------------
+
 # Sidebar — shop by image
-# ---------------------------------------------------------------------------
+
 with st.sidebar:
     st.header("Shop by Image")
     st.caption("Upload a photo of a product and I'll find similar items in our store.")
@@ -62,9 +60,9 @@ with st.sidebar:
         st.session_state.temp_image_path = image_path
         st.rerun()
 
-# ---------------------------------------------------------------------------
+
 # Render history — show a friendlier label for image-search messages
-# ---------------------------------------------------------------------------
+
 for msg in st.session_state.messages:
     with st.chat_message(msg["role"]):
         if msg["role"] == "user" and msg["content"].startswith("I uploaded a product image"):
@@ -73,9 +71,9 @@ for msg in st.session_state.messages:
         else:
             st.markdown(msg["content"].replace("$", r"\$"))
 
-# ---------------------------------------------------------------------------
+
 # Run agent if there's an unprocessed image-upload message
-# ---------------------------------------------------------------------------
+
 if (
     st.session_state.messages
     and st.session_state.messages[-1]["role"] == "user"
@@ -97,9 +95,7 @@ if (
     del st.session_state.pending_image
     st.rerun()
 
-# ---------------------------------------------------------------------------
-# Text input
-# ---------------------------------------------------------------------------
+
 if prompt := st.chat_input("e.g. I want organic honey under $15 with 4+ rating"):
     st.session_state.messages.append({"role": "user", "content": prompt})
     with st.chat_message("user"):

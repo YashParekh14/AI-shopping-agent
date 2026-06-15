@@ -1,7 +1,3 @@
-"""
-Reviews API — aggregated rating information for products, read from the
-`reviews` table in store.db.
-"""
 
 from db import get_connection
 
@@ -21,11 +17,7 @@ def get_product_rating(product_id: int) -> dict:
 
 
 def get_ratings_for_products(product_ids: list[int]) -> list[dict]:
-    """Return ratings for a list of product IDs in a single query.
-
-    Use this instead of calling get_product_rating in a loop — it avoids an
-    N+1 query (and, when wired to the agent, N separate LLM round-trips).
-    """
+    
     if not product_ids:
         return []
 
