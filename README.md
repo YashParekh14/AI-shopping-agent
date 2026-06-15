@@ -1,6 +1,6 @@
 # 🛒 AI Shopping Assistant
 
-🔴 **Live demo:** 
+🔴 **Live demo:**  https://ai-shopping-agent-ql2vcdmjectqdwdcvonli2.streamlit.app/
 
 A conversational shopping agent built with **LangChain** and a **Groq**-hosted LLM.
 Users describe what they want in natural language (or upload a product photo) and the
