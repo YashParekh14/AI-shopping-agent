@@ -3,7 +3,7 @@
 A production-ready conversational shopping agent powered by **GPT-4o** and **LangChain**.
 Users find and order products through natural language or by uploading a product photo.
 
-🔴 **Live demo:** https://your-app.streamlit.app *(update with your URL)*
+🔴 **Live demo:** https://ai-shopping-agent-ql2vcdmjectqdwdcvonli2.streamlit.app/
 📦 **Docker:** `docker run -e OPENAI_API_KEY=sk-... yashparekh14/ai-shopping-agent`
 
 ---
