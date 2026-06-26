@@ -1,0 +1,16 @@
+# Core app
+streamlit>=1.33
+langchain>=1.0
+langchain-core>=0.3
+langchain-openai>=0.2
+openai>=1.0
+python-dotenv>=1.0
+
+# Database
+psycopg2-binary>=2.9    # PostgreSQL / Supabase support
+
+# Observability
+langsmith>=0.1          # LangSmith tracing (optional, set env vars to enable)
+
+# Dev / testing
+pytest>=8.0

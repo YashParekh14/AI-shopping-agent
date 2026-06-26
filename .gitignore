@@ -1,0 +1,24 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+.pytest_cache/
+
+# Virtual environment
+venv/
+.venv/
+
+# Secrets — NEVER commit these
+.env
+
+# Local database
+store.db
+*.db-journal
+
+# Eval results (generated at runtime)
+eval/results.json
+
+# IDE
+.vscode/
+*.swp
+.DS_Store

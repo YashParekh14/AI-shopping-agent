@@ -1,0 +1,27 @@
+# Python
+__pycache__/
+*.pyc
+*.pyo
+.pytest_cache/
+
+# Virtual environment — never goes in Docker image
+venv/
+.venv/
+
+# Local secrets — injected via env vars at runtime
+.env
+
+# Local database — use Supabase/RDS in production
+store.db
+*.db-journal
+
+# Eval results — generated at runtime
+eval/results.json
+
+# Git
+.git/
+.gitignore
+
+# IDE
+.vscode/
+*.swp
