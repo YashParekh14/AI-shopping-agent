@@ -77,3 +77,28 @@ jobs:
 
       - name: Image digest
         run: echo "Image pushed successfully"
+
+deploy:
+    needs: docker
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
+    steps:
+      - name: Deploy to EC2
+        uses: appleboy/ssh-action@master
+        with:
+          host: 13.42.21.134
+          username: ec2-user
+          key: ${{ secrets.EC2_SSH_KEY }}
+          script: |
+            sudo docker pull yashparekh14/ai-shopping-agent:latest
+            sudo docker stop shopping-agent || true
+            sudo docker rm shopping-agent || true
+            sudo docker run -d -p 8501:8501 \
+              -e OPENAI_API_KEY="${{ secrets.OPENAI_API_KEY }}" \
+              -e DATABASE_URL="${{ secrets.DATABASE_URL }}" \
+              -e LANGCHAIN_API_KEY="${{ secrets.LANGCHAIN_API_KEY }}" \
+              -e LANGCHAIN_TRACING_V2="true" \
+              -e LANGCHAIN_PROJECT="shopping-agent" \
+              --name shopping-agent \
+              --restart unless-stopped \
+              yashparekh14/ai-shopping-agent:latest
