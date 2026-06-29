@@ -197,9 +197,12 @@ st.markdown("""
     box-shadow: 0 0 0 3px var(--accent-amber-glow) !important;
 }
 
-[data-testid="stChatInput"] textarea {
+[data-testid="stChatInput"] textarea,
+[data-testid="stChatInput"] textarea:focus,
+.stChatInput textarea {
     background: transparent !important;
-    color: var(--text-primary) !important;
+    color: #f1f5f9 !important;
+    caret-color: #f59e0b !important;
     font-family: 'Inter', sans-serif !important;
     font-size: 0.95rem !important;
     padding: 1rem 1.25rem !important;
@@ -460,7 +463,7 @@ with st.sidebar:
     st.markdown('<p style="font-size:0.82rem; color:#64748b; margin-bottom:1rem;">Upload a product photo and I\'ll find similar items.</p>', unsafe_allow_html=True)
 
     uploaded_file = st.file_uploader(
-        "Choose an image",
+        "",
         type=["jpg", "jpeg", "png", "webp"],
         label_visibility="collapsed",
     )
