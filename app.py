@@ -316,15 +316,6 @@ st.markdown("""
     font-size: 0.85rem !important;
 }
 
-/* Fix duplicate "upload" text in Browse button — Streamlit 1.58 bug */
-[data-testid="stFileUploaderDropzone"] button[kind="secondary"] {
-    font-size: 0 !important;
-}
-[data-testid="stFileUploaderDropzone"] button[kind="secondary"]::after {
-    content: "Browse files" !important;
-    font-size: 0.85rem !important;
-}
-
 /* Sidebar button */
 [data-testid="stSidebar"] .stButton button {
     background: var(--accent-amber) !important;
