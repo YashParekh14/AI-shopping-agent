@@ -308,6 +308,28 @@ st.markdown("""
     font-size: 0.85rem !important;
 }
 
+/* Hide the duplicate internal uploader label text */
+[data-testid="stFileUploader"] [data-testid="stFileUploaderDropzone"] span:first-child,
+[data-testid="stFileUploaderDropzoneInstructions"] div:first-child span {
+    display: none !important;
+}
+
+/* Show only one "Browse files" button label */
+[data-testid="stFileUploaderDropzoneInstructions"] {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+}
+
+/* Hide the duplicate "upload" text that appears twice in the button */
+[data-testid="stFileUploaderDropzone"] button span + span {
+    display: none !important;
+}
+
+[data-testid="stBaseButton-secondary"] span:not(:first-child) {
+    display: none !important;
+}
+
 /* Sidebar button */
 [data-testid="stSidebar"] .stButton button {
     background: var(--accent-amber) !important;
@@ -465,7 +487,7 @@ with st.sidebar:
     uploaded_file = st.file_uploader(
         "Upload a product image",
         type=["jpg", "jpeg", "png", "webp"],
-        label_visibility="hidden",
+        label_visibility="collapsed",
     )
 
     if uploaded_file:
