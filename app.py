@@ -199,13 +199,21 @@ st.markdown("""
 
 [data-testid="stChatInput"] textarea,
 [data-testid="stChatInput"] textarea:focus,
-.stChatInput textarea {
+.stChatInput textarea,
+[class*="stChatInputTextArea"] textarea,
+[class*="stChatInputTextArea"] {
     background: transparent !important;
     color: #f1f5f9 !important;
     caret-color: #f59e0b !important;
     font-family: 'Inter', sans-serif !important;
     font-size: 0.95rem !important;
     padding: 1rem 1.25rem !important;
+}
+
+/* Override Streamlit theme bodyText color on chat textarea */
+.stChatInput textarea {
+    color: #f1f5f9 !important;
+    -webkit-text-fill-color: #f1f5f9 !important;
 }
 
 [data-testid="stChatInput"] textarea::placeholder {
@@ -306,28 +314,6 @@ st.markdown("""
 [data-testid="stFileUploader"] label {
     color: var(--text-secondary) !important;
     font-size: 0.85rem !important;
-}
-
-/* Hide the duplicate internal uploader label text */
-[data-testid="stFileUploader"] [data-testid="stFileUploaderDropzone"] span:first-child,
-[data-testid="stFileUploaderDropzoneInstructions"] div:first-child span {
-    display: none !important;
-}
-
-/* Show only one "Browse files" button label */
-[data-testid="stFileUploaderDropzoneInstructions"] {
-    display: flex !important;
-    flex-direction: column !important;
-    align-items: center !important;
-}
-
-/* Hide the duplicate "upload" text that appears twice in the button */
-[data-testid="stFileUploaderDropzone"] button span + span {
-    display: none !important;
-}
-
-[data-testid="stBaseButton-secondary"] span:not(:first-child) {
-    display: none !important;
 }
 
 /* Sidebar button */
@@ -485,7 +471,7 @@ with st.sidebar:
     st.markdown('<p style="font-size:0.82rem; color:#64748b; margin-bottom:1rem;">Upload a product photo and I\'ll find similar items.</p>', unsafe_allow_html=True)
 
     uploaded_file = st.file_uploader(
-        "Upload a product image",
+        "Choose an image",
         type=["jpg", "jpeg", "png", "webp"],
         label_visibility="collapsed",
     )
