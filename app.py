@@ -463,9 +463,9 @@ with st.sidebar:
     st.markdown('<p style="font-size:0.82rem; color:#64748b; margin-bottom:1rem;">Upload a product photo and I\'ll find similar items.</p>', unsafe_allow_html=True)
 
     uploaded_file = st.file_uploader(
-        "",
+        "Upload a product image",
         type=["jpg", "jpeg", "png", "webp"],
-        label_visibility="collapsed",
+        label_visibility="hidden",
     )
 
     if uploaded_file:
